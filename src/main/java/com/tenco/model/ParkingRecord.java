@@ -3,6 +3,7 @@ package com.tenco.model;
 import lombok.*;
 
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -16,4 +17,5 @@ public class ParkingRecord {
     private int zoneId;
     private LocalDateTime entryTime;
     private LocalDateTime exitTime;
+    private BigDecimal fee;
 }
