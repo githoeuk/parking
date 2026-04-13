@@ -16,6 +16,7 @@ public class MonthlyPass {
     private int passId;
     private String carNumber;
     private String ownerName;
+    private String phone;
     private Date startDate;
     private Date endDate;
     private BigDecimal fee;
