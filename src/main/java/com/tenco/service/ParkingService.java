@@ -54,6 +54,31 @@ public class ParkingService {
         return parkingRecordDAO.getParkingRecords();
     }
 
+    // 입차 중인 차량 조회 (출차 화면용)
+    public ParkingRecord getRecordByCarNum(String carNumber) throws SQLException {
+        return parkingRecordDAO.selectByCarNum(carNumber);
+    }
+
+    // 이력 조회 (필터 포함)
+    public List<ParkingRecord> getParkingRecords(String carNumber, String fromDate, String toDate) throws SQLException {
+        List<ParkingRecord> all = parkingRecordDAO.getParkingRecords();
+        return all.stream()
+                .filter(r -> carNumber.isEmpty() || r.getCarNumber().contains(carNumber))
+                .filter(r -> {
+                    if (fromDate.isEmpty()) return true;
+                    try {
+                        return !r.getEntryTime().toLocalDate().isBefore(java.time.LocalDate.parse(fromDate));
+                    } catch (Exception e) { return true; }
+                })
+                .filter(r -> {
+                    if (toDate.isEmpty()) return true;
+                    try {
+                        return !r.getEntryTime().toLocalDate().isAfter(java.time.LocalDate.parse(toDate));
+                    } catch (Exception e) { return true; }
+                })
+                .collect(java.util.stream.Collectors.toList());
+    }
+
     // 전체 구역 출력
     public List<ParkingZone> getParkingZoneList() throws SQLException {
         return parkingZoneDAO.getParkingZoneList();
@@ -63,14 +88,5 @@ public class ParkingService {
     public void insertParkingZone(String zoneCode) throws SQLException {
         parkingZoneDAO.insertParkingZone(zoneCode);
         System.out.println("성공");
-    }
-
-    public static void main(String[] args) {
-        ParkingService service = new ParkingService();
-        try {
-            service.exiting("246부8356");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

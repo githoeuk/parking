@@ -21,4 +21,5 @@ public class MonthlyPass {
     private Date startDate;
     private Date endDate;
     private BigDecimal fee;
+    private boolean isAvailable;
 }
