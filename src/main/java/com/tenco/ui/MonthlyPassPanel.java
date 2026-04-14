@@ -15,7 +15,7 @@ import java.awt.*;
  */
 public class MonthlyPassPanel extends JPanel {
 
-    private static final String[] COLUMNS = {"ID", "차량 번호", "소유자", "시작일", "종료일", "요금(원)", "상태"};
+    private static final String[] COLUMNS = {"ID", "차량 번호", "소유자", "연락처", "시작일", "종료일", "요금(원)", "상태"};
 
     private DefaultTableModel tableModel;
     private JTable table;
@@ -23,6 +23,7 @@ public class MonthlyPassPanel extends JPanel {
     // 등록 폼
     private JTextField regCarField;
     private JTextField regOwnerField;
+    private JTextField regPhoneField;
     private JTextField regStartField;
     private JTextField regEndField;
     private JTextField regFeeField;
@@ -77,14 +78,16 @@ public class MonthlyPassPanel extends JPanel {
         JPanel fields = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 4));
         fields.setOpaque(false);
 
-        regCarField   = buildSmallField(150, "차량 번호");
-        regOwnerField = buildSmallField(100, "소유자");
+        regCarField   = buildSmallField(140, "차량 번호 예) 12가 3456");
+        regOwnerField = buildSmallField(90,  "소유자 이름");
+        regPhoneField = buildSmallField(120, "연락처 예) 010-1234-5678");
         regStartField = buildSmallField(110, "시작일 yyyy-MM-dd");
         regEndField   = buildSmallField(110, "종료일 yyyy-MM-dd");
-        regFeeField   = buildSmallField(90,  "요금 (원)");
+        regFeeField   = buildSmallField(80,  "요금 (원)");
 
         fields.add(buildInlineLabel("차량번호")); fields.add(regCarField);
         fields.add(buildInlineLabel("소유자"));   fields.add(regOwnerField);
+        fields.add(buildInlineLabel("연락처"));   fields.add(regPhoneField);
         fields.add(buildInlineLabel("시작일"));   fields.add(regStartField);
         fields.add(buildInlineLabel("종료일"));   fields.add(regEndField);
         fields.add(buildInlineLabel("요금"));     fields.add(regFeeField);
@@ -138,8 +141,8 @@ public class MonthlyPassPanel extends JPanel {
         table.setShowVerticalLines(false);
         table.getColumnModel().getColumn(0).setMaxWidth(50);
 
-        // 상태 열 렌더러
-        table.getColumnModel().getColumn(6).setCellRenderer(new PassStatusRenderer());
+        // 상태 열 렌더러 (컬럼 7번: ID/차량번호/소유자/연락처/시작일/종료일/요금/상태)
+        table.getColumnModel().getColumn(7).setCellRenderer(new PassStatusRenderer());
 
         JScrollPane scroll = new JScrollPane(table);
         scroll.setBorder(BorderFactory.createLineBorder(new Color(220, 225, 235)));
@@ -186,6 +189,7 @@ public class MonthlyPassPanel extends JPanel {
 
     public String getRegCar()   { return regCarField.getText().trim(); }
     public String getRegOwner() { return regOwnerField.getText().trim(); }
+    public String getRegPhone() { return regPhoneField.getText().trim(); }
     public String getRegStart() { return regStartField.getText().trim(); }
     public String getRegEnd()   { return regEndField.getText().trim(); }
     public String getRegFee()   { return regFeeField.getText().trim(); }
@@ -200,7 +204,7 @@ public class MonthlyPassPanel extends JPanel {
 
     /**
      * 테이블 데이터 설정 (is_available = true 인 행만 전달)
-     * row: [passId, carNumber, ownerName, startDate, endDate, fee, 상태문자열]
+     * row: [passId, carNumber, ownerName, phone, startDate, endDate, fee, 상태문자열]
      * 상태 값: "유효" | "만료 임박" | "만료"
      */
     public void setRows(Object[][] rows) {
@@ -211,6 +215,7 @@ public class MonthlyPassPanel extends JPanel {
     public void clearRegForm() {
         regCarField.setText("");
         regOwnerField.setText("");
+        regPhoneField.setText("");
         regStartField.setText("");
         regEndField.setText("");
         regFeeField.setText("");

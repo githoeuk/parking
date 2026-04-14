@@ -121,7 +121,18 @@ public class EntryPanel extends JPanel {
     // ── 공용 위젯 헬퍼 ────────────────────────────────────
 
     private JTextField buildTextField(String placeholder) {
-        JTextField f = new JTextField();
+        JTextField f = new JTextField() {
+            @Override
+            protected void paintComponent(java.awt.Graphics g) {
+                super.paintComponent(g);
+                if (getText().isEmpty() && !isFocusOwner()) {
+                    g.setColor(new Color(180, 185, 200));
+                    g.setFont(getFont().deriveFont(java.awt.Font.ITALIC));
+                    java.awt.Insets ins = getInsets();
+                    g.drawString(placeholder, ins.left + 2, getHeight() - ins.bottom - 4);
+                }
+            }
+        };
         f.setFont(new Font("SansSerif", Font.PLAIN, 13));
         f.setToolTipText(placeholder);
         f.setBorder(BorderFactory.createCompoundBorder(
@@ -167,9 +178,18 @@ public class EntryPanel extends JPanel {
 
     public void setZoneList(List<ParkingZone> zones) {
         zoneCombo.removeAllItems();
-        for (ParkingZone z : zones) {
-            zoneCombo.addItem(z.getZoneCode() + " (id:" + z.getZoneId() + ")");
+        if (zones.isEmpty()) {
+            zoneCombo.addItem("빈 구역 없음");
+        } else {
+            for (ParkingZone z : zones) {
+                zoneCombo.addItem(z.getZoneCode());
+            }
         }
+    }
+
+    /** 콤보박스 선택 구역에 해당하는 zoneId 반환 (zones 리스트와 인덱스 매핑) */
+    public int getSelectedZoneIndex() {
+        return zoneCombo.getSelectedIndex();
     }
 
     public void setResult(String msg, boolean success) {
