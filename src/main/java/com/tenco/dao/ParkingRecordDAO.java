@@ -26,7 +26,6 @@ public class ParkingRecordDAO {
     }
 
 
-
     // carNumber로 정보 조회(요금 조회 및 입출차 확인용)
     public ParkingRecord selectByCarNum(String carNumber) throws SQLException {
         String sql = """
@@ -46,6 +45,19 @@ public class ParkingRecordDAO {
         return null;
     }
 
+    // 출차 시간 기록
+    public void exiting(String carNumber) throws SQLException {
+        String sql = """
+                UPDATE parking_record SET exit_time = NOW() WHERE car_number = ? AND exit_time IS NULL
+                """;
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, carNumber);
+            pstmt.executeUpdate();
+        }
+    }
+
 
     private ParkingRecord mapToParkingRecord(ResultSet rs) throws SQLException {
         Timestamp exitTimestamp = rs.getTimestamp("exit_time");
@@ -59,6 +71,4 @@ public class ParkingRecordDAO {
                 .fee(feeValue != null ? feeValue : java.math.BigDecimal.ZERO)
                 .build();
     }
-
-
 }
