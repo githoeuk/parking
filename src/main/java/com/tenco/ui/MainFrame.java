@@ -18,7 +18,8 @@ public class MainFrame extends JFrame {
     public MainFrame() {
         setTitle("주차관리시스템");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(900, 650);
+        setSize(1000, 700);
+        setMinimumSize(new Dimension(800, 600));
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
@@ -97,6 +98,7 @@ public class MainFrame extends JFrame {
         contentPanel.add(monthlyPassPanel, "PASS");
         contentPanel.add(zoneManagePanel,  "ZONE");
 
+        cardLayout.show(contentPanel, "STATUS");
         return contentPanel;
     }
 

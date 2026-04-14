@@ -20,6 +20,7 @@ public class HistoryPanel extends JPanel {
     private JTextField toDateField;
     private JButton searchBtn;
     private JButton resetBtn;
+    private JButton allBtn;
 
     private DefaultTableModel tableModel;
     private JTable table;
@@ -73,8 +74,10 @@ public class HistoryPanel extends JPanel {
         toDateField = buildTextField(110, "yyyy-MM-dd");
         card.add(toDateField);
 
-        searchBtn = buildBtn("검색", new Color(37, 99, 235), Color.WHITE);
-        resetBtn  = buildBtn("초기화", new Color(240, 243, 248), new Color(60, 70, 90));
+        allBtn    = buildBtn("전체 조회", new Color(22, 163, 74),   Color.WHITE);
+        searchBtn = buildBtn("검색",     new Color(37, 99, 235),   Color.WHITE);
+        resetBtn  = buildBtn("초기화",   new Color(240, 243, 248), new Color(60, 70, 90));
+        card.add(allBtn);
         card.add(searchBtn);
         card.add(resetBtn);
 
@@ -168,6 +171,7 @@ public class HistoryPanel extends JPanel {
         toDateField.setText("");
     }
 
+    public JButton getAllBtn()     { return allBtn; }
     public JButton getSearchBtn() { return searchBtn; }
     public JButton getResetBtn()  { return resetBtn; }
 }

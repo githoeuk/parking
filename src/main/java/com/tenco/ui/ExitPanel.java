@@ -120,7 +120,19 @@ public class ExitPanel extends JPanel {
         lbl.setFont(new Font("SansSerif", Font.PLAIN, 13));
         lbl.setForeground(new Color(70, 80, 100));
 
-        carNumberField = new JTextField();
+        carNumberField = new JTextField() {
+            private static final String PLACEHOLDER = "예) 12가 3456";
+            @Override
+            protected void paintComponent(java.awt.Graphics g) {
+                super.paintComponent(g);
+                if (getText().isEmpty() && !isFocusOwner()) {
+                    g.setColor(new Color(180, 185, 200));
+                    g.setFont(getFont().deriveFont(java.awt.Font.ITALIC));
+                    java.awt.Insets ins = getInsets();
+                    g.drawString(PLACEHOLDER, ins.left + 2, getHeight() - ins.bottom - 4);
+                }
+            }
+        };
         carNumberField.setFont(new Font("SansSerif", Font.PLAIN, 13));
         carNumberField.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(200, 205, 215)),

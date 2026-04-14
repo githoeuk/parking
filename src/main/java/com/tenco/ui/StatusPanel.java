@@ -22,6 +22,7 @@ public class StatusPanel extends JPanel {
     private DefaultTableModel tableModel;
     private JTable table;
     private JLabel emptyCountLabel;
+    private JLabel occupiedCountLabel;
     private JButton refreshBtn;
 
     public StatusPanel() {
@@ -45,6 +46,10 @@ public class StatusPanel extends JPanel {
         JPanel right = new JPanel(new FlowLayout(FlowLayout.RIGHT, 12, 0));
         right.setOpaque(false);
 
+        occupiedCountLabel = new JLabel("주차 중: —");
+        occupiedCountLabel.setFont(new Font("SansSerif", Font.BOLD, 13));
+        occupiedCountLabel.setForeground(new Color(220, 38, 38));
+
         emptyCountLabel = new JLabel("빈 자리: —");
         emptyCountLabel.setFont(new Font("SansSerif", Font.BOLD, 13));
         emptyCountLabel.setForeground(new Color(22, 163, 74));
@@ -58,6 +63,7 @@ public class StatusPanel extends JPanel {
         refreshBtn.setPreferredSize(new Dimension(90, 32));
         refreshBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
+        right.add(occupiedCountLabel);
         right.add(emptyCountLabel);
         right.add(refreshBtn);
 
@@ -105,6 +111,10 @@ public class StatusPanel extends JPanel {
 
     public void setEmptyCount(int count) {
         emptyCountLabel.setText("빈 자리: " + count + " 개");
+    }
+
+    public void setOccupiedCount(int count) {
+        occupiedCountLabel.setText("주차 중: " + count + " 대");
     }
 
     public JButton getRefreshBtn() { return refreshBtn; }
