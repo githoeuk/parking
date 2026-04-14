@@ -40,8 +40,8 @@ public class MonthlyPassDAO {
         } // end of pstmt
         return mPassList;
     } // end of findPassList
-    // 정기권 등록
 
+    // 정기권 등록
     public boolean insert(MonthlyPass mPass) throws SQLException {
 
         String sql = """
@@ -113,6 +113,8 @@ public class MonthlyPassDAO {
 
     } // end if check
 
+
+
     // 정기권 만료 알림
     public List<MonthlyPass> isNearExpiry ()throws SQLException{
        List<MonthlyPass> mPass = new ArrayList<>();
@@ -140,5 +142,23 @@ public class MonthlyPassDAO {
 
         return mPass;
     } // end of isNearExpiry
+
+    // 정기권 유효한지
+    public boolean getMonthlyPassByCarNumber(String carNumber) throws SQLException {
+        String sql = """
+                SELECT is_available FROM monthly_pass WHERE car_number = ?
+                """;
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setString(1, carNumber);
+            try(ResultSet rs = stmt.executeQuery()){
+                if(rs.next()){
+                    return rs.getBoolean("is_available");
+                }
+            }
+            return false;
+        }
+    }
 
 } // end of class

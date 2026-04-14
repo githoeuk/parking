@@ -11,6 +11,7 @@ import java.util.List;
 
 public class ParkingRecordDAO {
 
+    private final ParkingZoneDAO parkingZoneDAO = new ParkingZoneDAO();
 
     // 입차 시 INSERT
     public void parking(String carNumber, int zoneId) throws SQLException {
@@ -126,44 +127,69 @@ public class ParkingRecordDAO {
     }
 
     // 출차 시간 기록
-    public void exiting(String carNumber) throws SQLException {
+    public void exiting(String carNumber, BigDecimal fee) throws SQLException {
         String selectSql = """
                 select * from parking_record where car_number = ? and exit_time is null
                 """;
-        List<ParkingRecord> records = new ArrayList<>();
 
         String updateSql = """
-                UPDATE parking_record SET exit_time = NOW() WHERE car_number = ? AND exit_time IS NULL
+                UPDATE parking_record SET exit_time = CURRENT_TIME, fee = ? WHERE car_number = ? AND exit_time IS NULL
                 """;
 
+
+        // car_number가 존재하지 않음 그래서 carNumber로
         String updateSql2 = """
-                UPDATE parking_zone SET is_available = true WHERE car_number = ?
+                UPDATE parking_zone SET is_available = true WHERE zone_id = ?
                 """;
 
         Connection conn = null;
+        ParkingRecord record = null;
 
         try{
             conn = DBConnection.getConnection();
             conn.setAutoCommit(false);
 
-            try(PreparedStatement stmt = conn.prepareStatement(updateSql)){
+            try(PreparedStatement stmt = conn.prepareStatement(selectSql)){
                 stmt.setString(1, carNumber);
-                stmt.executeUpdate();
+                try(ResultSet rs = stmt.executeQuery()){
+                    if(rs.next()){
+                        record = mapToParkingRecord(rs);
+                    }
+                }
+            }
+
+            if(record == null){
+                throw new SQLException("해당하는 차 번호 존재하지 않음.");
+            }
+
+
+            try(PreparedStatement stmt = conn.prepareStatement(updateSql)){
+                stmt.setBigDecimal(1, fee);
+                stmt.setString(2, carNumber);
+                int rows = stmt.executeUpdate();
+                if(rows <= 0){
+                    throw new SQLException("fee 업데이트 오류");
+                }
+
+                System.out.println(fee);
             }
 
             try(PreparedStatement stmt = conn.prepareStatement(updateSql2)){
-                stmt.setString(1, carNumber);
-                stmt.executeUpdate();
+                stmt.setInt(1, record.getZoneId());
+                int rows = stmt.executeUpdate();
+                if(rows <= 0){
+                    throw new SQLException("parking zone 업데이트 오류");
+                }
             }
 
             conn.commit();
         } catch (SQLException e){
             if(conn != null){
                 conn.rollback();
-                throw new SQLException("출차 실패");
+                conn.setAutoCommit(true);
+                throw new SQLException(e.getMessage());
             }
         } finally {
-            conn.setAutoCommit(true);
             conn.close();
         }
     }
