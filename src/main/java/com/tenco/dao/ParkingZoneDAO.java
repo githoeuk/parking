@@ -3,6 +3,7 @@ package com.tenco.dao;
 import com.tenco.db.DBConnection;
 import com.tenco.model.ParkingZone;
 
+import javax.swing.text.html.HTMLDocument;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,8 +32,44 @@ public class ParkingZoneDAO {
 
     }
 
-    //2.사용가능한 zone 코드
+    // 구역 추가
+    public void insertParkingZone(String zoneCode){
+        String sql = """
+                INSERT INTO parking_zone (zone_code) VALUES (?)
+                """;
 
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setString(1, zoneCode);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // 전체 parkingZone
+    public List<ParkingZone> getAllParkingZone() throws SQLException {
+        String sql = """
+                SELECT * FROM parking_zone
+                """;
+        List<ParkingZone> list = new ArrayList<>();
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery()){
+            while(rs.next()){
+                list.add(
+                        ParkingZone.builder()
+                                .zoneId(rs.getInt("zone_id"))
+                                .zoneCode(rs.getString("zone_code"))
+                                .isAvailable(rs.getBoolean("is_available"))
+                                .build()
+                );
+            }
+        }
+        return list;
+    }
+
+    //2.사용가능한 zone 코드
     public List<ParkingZone> getParkingZoneList() throws SQLException {
         List<ParkingZone> list = new ArrayList<>();
         String sql = """
@@ -76,7 +113,6 @@ public class ParkingZoneDAO {
     }
 
     // 주차/출자 를 하면 is available이 업데이트 된다
-
     public void updateParkingZone(int zoneId ,boolean flag) throws SQLException {
 
         if (checkZoneById(zoneId) == flag){
@@ -99,10 +135,28 @@ public class ParkingZoneDAO {
                 throw new SQLException("업데이트 실패했습니다");
             }
         }
+    }
 
 
 
 
+
+    public int getZoneIdByZoneCode(String zoneCode) throws SQLException {
+        String sql = """
+                SELECT zone_id FROM parking_zone WHERE zone_code = ?
+                """;
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setString(1, zoneCode);
+
+            try(ResultSet rs = stmt.executeQuery()){
+                if(rs.next()){
+                    return rs.getInt("zone_id");
+                }
+            }
+        }
+        return -1;
     }
 
 
