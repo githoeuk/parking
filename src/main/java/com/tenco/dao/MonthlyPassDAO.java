@@ -65,7 +65,7 @@ public class MonthlyPassDAO {
     } // end of insert
 
     // 정기원 삭제
-    public void soft_delete(String carNum) throws SQLException {
+    public boolean soft_delete(String carNum) throws SQLException {
 
         String sql = """
                 UPDATE monthly_pass
@@ -78,8 +78,9 @@ public class MonthlyPassDAO {
         ) {
             pstmt.setString(1, carNum);
             pstmt.executeUpdate();
-        }
 
+            return true;
+        }
     } // end of soft_delete
 
     // 기간 내 차량 요금 면제
@@ -112,5 +113,32 @@ public class MonthlyPassDAO {
 
     } // end if check
 
+    // 정기권 만료 알림
+    public List<MonthlyPass> isNearExpiry ()throws SQLException{
+       List<MonthlyPass> mPass = new ArrayList<>();
+        String sql = """
+                SELECT * FROM monthly_pass WHERE end_date - CURRENT_DATE() <= 15
+                """;
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement tstmt = conn.prepareStatement(sql);
+        ){
+            try(ResultSet rs = tstmt.executeQuery()){
+                while (rs.next()){
+                    MonthlyPass mList = MonthlyPass.builder()
+                            .passId(rs.getInt("pass_id"))
+                            .carNumber(rs.getString("car_number"))
+                            .ownerName(rs.getString("owner_name"))
+                            .startDate(rs.getDate("start_date"))
+                            .endDate(rs.getDate("end_date"))
+                            .fee(rs.getBigDecimal("fee"))
+                            .build();
+                    mPass.add(mList);
+                } // end of while
+            } // end of rs
+        } // end of pstmt
+
+        return mPass;
+    } // end of isNearExpiry
 
 } // end of class

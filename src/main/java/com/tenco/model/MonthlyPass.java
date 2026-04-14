@@ -10,6 +10,7 @@ import java.sql.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 
 
 public class MonthlyPass {
