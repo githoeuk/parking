@@ -15,6 +15,7 @@ public class ParkingRecord {
     private int recordId;
     private String carNumber;
     private int zoneId;
+    private String zoneCode;
     private LocalDateTime entryTime;
     private LocalDateTime exitTime;
     private BigDecimal fee;
