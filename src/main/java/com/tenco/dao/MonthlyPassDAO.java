@@ -12,7 +12,7 @@ import java.util.List;
 
 public class MonthlyPassDAO {
 
-    // 정기권 조회 , 정기권 등록 , 정기권 삭제 , 기간 내 차량 요금 면제
+    // 정기권 조회 , 정기권 등록 , 정기권 삭제 , 기간 내 차량 요금 면제 , 기간 연장
 
     // 정기권 조회
     public List<MonthlyPass> findPassList() throws SQLException {
@@ -65,18 +65,18 @@ public class MonthlyPassDAO {
     } // end of insert
 
     // 정기원 삭제
-    public void soft_delete(int id) throws SQLException {
+    public void soft_delete(String carNum) throws SQLException {
 
         String sql = """
                 UPDATE monthly_pass
                 set is_available = FALSE
-                where pass_id = ?
+                where car_number = ?
                 """;
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
         ) {
-            pstmt.setInt(1, id);
+            pstmt.setString(1, carNum);
             pstmt.executeUpdate();
         }
 
@@ -84,17 +84,17 @@ public class MonthlyPassDAO {
 
     // 기간 내 차량 요금 면제
 
-    public void check(int id) throws SQLException {
+    public void check(String carNum) throws SQLException {
         List<MonthlyPass> mList = new ArrayList<>();
         String sql = """
-                SELECT * FROM monthly_pass WHERE pass_id = ? and is_available = 1;
+                SELECT * FROM monthly_pass WHERE car_number = ? and is_available = 1;
                 """;
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
 
         ) {
-            pstmt.setInt(1, id);
+            pstmt.setString(1, carNum);
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     MonthlyPass mPass = MonthlyPass.builder()
