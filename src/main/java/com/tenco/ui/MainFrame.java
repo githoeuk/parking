@@ -1,8 +1,11 @@
 package com.tenco.ui;
 
+import lombok.Getter;
+
 import javax.swing.*;
 import java.awt.*;
 
+@Getter
 public class MainFrame extends JFrame {
 
     private JPanel contentPanel;
@@ -117,10 +120,4 @@ public class MainFrame extends JFrame {
         cardLayout.show(contentPanel, card);
     }
 
-    public EntryPanel       getEntryPanel()       { return entryPanel; }
-    public ExitPanel        getExitPanel()         { return exitPanel; }
-    public StatusPanel      getStatusPanel()       { return statusPanel; }
-    public HistoryPanel     getHistoryPanel()      { return historyPanel; }
-    public MonthlyPassPanel getMonthlyPassPanel()  { return monthlyPassPanel; }
-    public ZoneManagePanel  getZoneManagePanel()   { return zoneManagePanel; }
 }

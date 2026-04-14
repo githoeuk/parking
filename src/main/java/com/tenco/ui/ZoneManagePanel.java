@@ -1,5 +1,7 @@
 package com.tenco.ui;
 
+import lombok.Getter;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -11,6 +13,8 @@ import java.awt.*;
  * - 구역 목록 테이블 (ID / 구역코드 / 사용여부)
  * - 구역 추가 / 삭제 / 상태 변경 (is_available 토글)
  */
+
+@Getter
 public class ZoneManagePanel extends JPanel {
 
     private static final String[] COLUMNS = {"ID", "구역 코드", "사용 여부"};
@@ -195,11 +199,6 @@ public class ZoneManagePanel extends JPanel {
         addResultLabel.setText(msg);
         addResultLabel.setForeground(success ? new Color(22, 163, 74) : new Color(220, 38, 38));
     }
-
-    public JButton getAddBtn()     { return addBtn; }
-    public JButton getDeleteBtn()  { return deleteBtn; }
-    public JButton getToggleBtn()  { return toggleBtn; }
-    public JButton getRefreshBtn() { return refreshBtn; }
 
     // ── 사용 여부 컬럼 렌더러 ─────────────────────────────
 
