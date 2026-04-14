@@ -1,5 +1,7 @@
 package com.tenco.ui;
 
+import lombok.Getter;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -10,6 +12,7 @@ import java.awt.*;
  * - 전체 구역 목록 테이블 (구역코드 / 차량번호 / 입차시각)
  * - 빈 자리 수 / 주차 중 차량 수 표시
  */
+@Getter
 public class StatusPanel extends JPanel {
 
     private static final String[] COLUMNS = {"구역 코드", "차량 번호", "입차 시각"};
@@ -109,5 +112,4 @@ public class StatusPanel extends JPanel {
         occupiedCountLabel.setText("주차 중: " + count + " 대");
     }
 
-    public JButton getRefreshBtn() { return refreshBtn; }
 }

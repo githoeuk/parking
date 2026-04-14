@@ -1,6 +1,7 @@
 package com.tenco.ui;
 
 import com.tenco.model.ParkingZone;
+import lombok.Getter;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -13,12 +14,17 @@ import java.util.List;
  * - 빈 구역 콤보박스 선택
  * - 입차 등록 버튼
  */
+
+@Getter
 public class EntryPanel extends JPanel {
 
     private JTextField carNumberField;
+
     private JComboBox<String> zoneCombo;
+
     private JButton refreshZoneBtn;
     private JButton entryBtn;
+
     private JLabel resultLabel;
 
     public EntryPanel() {
@@ -202,7 +208,4 @@ public class EntryPanel extends JPanel {
         resultLabel.setText(" ");
     }
 
-    public JButton getEntryBtn()      { return entryBtn; }
-    public JButton getRefreshZoneBtn(){ return refreshZoneBtn; }
-    public JComboBox<String> getZoneCombo() { return zoneCombo; }
 }

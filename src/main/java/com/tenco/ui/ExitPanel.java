@@ -1,5 +1,7 @@
 package com.tenco.ui;
 
+import lombok.Getter;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -10,9 +12,11 @@ import java.awt.*;
  * - 입차 정보 + 예상 요금 표시
  * - 출차 처리 버튼
  */
+@Getter
 public class ExitPanel extends JPanel {
 
     private JTextField carNumberField;
+
     private JButton searchBtn;
 
     private JLabel infoZoneLabel;
@@ -218,6 +222,4 @@ public class ExitPanel extends JPanel {
         resultLabel.setForeground(success ? new Color(22, 163, 74) : new Color(220, 38, 38));
     }
 
-    public JButton getSearchBtn() { return searchBtn; }
-    public JButton getExitBtn()   { return exitBtn; }
 }

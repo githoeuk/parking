@@ -1,5 +1,7 @@
 package com.tenco.ui;
 
+import lombok.Getter;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -11,6 +13,8 @@ import java.awt.*;
  * - 차량 번호 검색 + 날짜 범위 필터
  * - 이력 테이블 (차량번호 / 구역 / 입차 / 출차 / 요금)
  */
+
+@Getter
 public class HistoryPanel extends JPanel {
 
     private static final String[] COLUMNS = {"차량 번호", "구역", "입차 시각", "출차 시각", "요금(원)"};
@@ -18,6 +22,7 @@ public class HistoryPanel extends JPanel {
     private JTextField carNumberField;
     private JTextField fromDateField;
     private JTextField toDateField;
+
     private JButton searchBtn;
     private JButton resetBtn;
     private JButton allBtn;
@@ -171,7 +176,4 @@ public class HistoryPanel extends JPanel {
         toDateField.setText("");
     }
 
-    public JButton getAllBtn()     { return allBtn; }
-    public JButton getSearchBtn() { return searchBtn; }
-    public JButton getResetBtn()  { return resetBtn; }
 }
