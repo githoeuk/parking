@@ -59,6 +59,7 @@ public class ParkingRecordDAO {
     }
 
 
+
     private ParkingRecord mapToParkingRecord(ResultSet rs) throws SQLException {
         Timestamp exitTimestamp = rs.getTimestamp("exit_time");
         BigDecimal feeValue = rs.getBigDecimal("fee");
