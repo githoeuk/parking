@@ -46,5 +46,9 @@ public class MonthlyPassService {
         return list;
     } // end of isNearExpiry
 
+    // 유효한 정기권 보유 여부 (출차 화면 정기권 확인용)
+    public boolean hasValidPass(String carNumber) throws SQLException {
+        return monthlyPassDAO.getMonthlyPassByCarNumber(carNumber);
+    }
 
 }

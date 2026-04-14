@@ -202,6 +202,14 @@ public class MonthlyPassPanel extends JPanel {
         try { return Integer.parseInt(val.toString()); } catch (Exception e) { return -1; }
     }
 
+    /** 선택된 행의 차량번호 (1번 컬럼) 반환. 선택 없으면 null */
+    public String getSelectedCarNumber() {
+        int row = table.getSelectedRow();
+        if (row < 0) return null;
+        Object val = tableModel.getValueAt(row, 1);
+        return val != null ? val.toString() : null;
+    }
+
     /**
      * 테이블 데이터 설정 (is_available = true 인 행만 전달)
      * row: [passId, carNumber, ownerName, phone, startDate, endDate, fee, 상태문자열]

@@ -141,6 +141,19 @@ public class ParkingZoneDAO {
 
 
 
+    // 구역 삭제
+    public void deleteParkingZone(int zoneId) throws SQLException {
+        String sql = """
+                DELETE FROM parking_zone WHERE zone_id = ?
+                """;
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, zoneId);
+            int rows = stmt.executeUpdate();
+            if (rows <= 0) throw new SQLException("삭제할 구역이 없습니다.");
+        }
+    }
+
     public int getZoneIdByZoneCode(String zoneCode) throws SQLException {
         String sql = """
                 SELECT zone_id FROM parking_zone WHERE zone_code = ?
@@ -157,17 +170,5 @@ public class ParkingZoneDAO {
             }
         }
         return -1;
-    }
-
-
-    public static void main(String[] args) {
-        ParkingZoneDAO zone = new ParkingZoneDAO();
-        try {
-            System.out.println(zone.getTotalParkingZone());
-
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

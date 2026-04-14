@@ -31,9 +31,11 @@ public class MonthlyPassDAO {
                         .passId(rs.getInt("pass_id"))
                         .carNumber(rs.getString("car_number"))
                         .ownerName(rs.getString("owner_name"))
+                        .phone(rs.getString("phone"))
                         .startDate(rs.getDate("start_date"))
                         .endDate(rs.getDate("end_date"))
                         .fee(rs.getBigDecimal("fee"))
+                        .isAvailable(rs.getBoolean("is_available"))
                         .build();
                 mPassList.add(mPass);
             } //end of while
