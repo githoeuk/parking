@@ -7,7 +7,9 @@ import com.tenco.model.ParkingZone;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ParkingService {
 
@@ -23,6 +25,10 @@ public class ParkingService {
 
         if(zoneCode.trim().isEmpty()){
             throw new SQLException("주차 구역은 필수 항목입니다.");
+        }
+
+        if(carNumber.trim().contains(" ")) {
+            throw new SQLException("공백 제거 요망");
         }
 
         int zoneId = parkingZoneDAO.getZoneIdByZoneCode(zoneCode);
@@ -60,7 +66,7 @@ public class ParkingService {
 
     // 입차 중인 차량 조회 (출차 화면용)
     public ParkingRecord getRecordByCarNum(String carNumber) throws SQLException {
-        return parkingRecordDAO.selectByCarNum(carNumber);
+        return parkingRecordDAO.selectByCarNum(carNumber.replaceAll(" ", ""));
     }
 
     // 이력 조회 (필터 포함)
@@ -71,16 +77,16 @@ public class ParkingService {
                 .filter(r -> {
                     if (fromDate.isEmpty()) return true;
                     try {
-                        return !r.getEntryTime().toLocalDate().isBefore(java.time.LocalDate.parse(fromDate));
+                        return !r.getEntryTime().toLocalDate().isBefore(LocalDate.parse(fromDate));
                     } catch (Exception e) { return true; }
                 })
                 .filter(r -> {
                     if (toDate.isEmpty()) return true;
                     try {
-                        return !r.getEntryTime().toLocalDate().isAfter(java.time.LocalDate.parse(toDate));
+                        return !r.getEntryTime().toLocalDate().isAfter(LocalDate.parse(toDate));
                     } catch (Exception e) { return true; }
                 })
-                .collect(java.util.stream.Collectors.toList());
+                .collect(Collectors.toList());
     }
 
     // 전체 구역 출력
