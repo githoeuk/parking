@@ -51,4 +51,9 @@ public class MonthlyPassService {
         return monthlyPassDAO.getMonthlyPassByCarNumber(carNumber);
     }
 
-}
+    // 정기권 기간 연장
+    public boolean isExtends(int date,String carNumber) throws SQLException {
+        return monthlyPassDAO.getExtends(date,carNumber);
+    }
+
+}// end of class
