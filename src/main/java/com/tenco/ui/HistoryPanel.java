@@ -8,6 +8,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
+import static com.tenco.ui.UIFont.*;
+
 /**
  * 이력 조회 화면
  * - 차량 번호 검색 + 날짜 범위 필터
@@ -45,7 +47,7 @@ public class HistoryPanel extends JPanel {
         p.setOpaque(false);
         p.setBorder(new EmptyBorder(0, 0, 16, 0));
         JLabel title = new JLabel("입출차 이력");
-        title.setFont(new Font("SansSerif", Font.BOLD, 20));
+        title.setFont(bold(20));
         title.setForeground(new Color(30, 40, 55));
         p.add(title);
         return p;
@@ -95,7 +97,7 @@ public class HistoryPanel extends JPanel {
 
         // 하단 카운트
         countLabel = new JLabel("총 0 건");
-        countLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        countLabel.setFont(plain(12));
         countLabel.setForeground(new Color(100, 110, 130));
 
         tableModel = new DefaultTableModel(COLUMNS, 0) {
@@ -104,8 +106,8 @@ public class HistoryPanel extends JPanel {
 
         table = new JTable(tableModel);
         table.setRowHeight(30);
-        table.setFont(new Font("SansSerif", Font.PLAIN, 13));
-        table.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 12));
+        table.setFont(plain(13));
+        table.getTableHeader().setFont(bold(12));
         table.getTableHeader().setBackground(new Color(240, 243, 248));
         table.getTableHeader().setForeground(new Color(70, 80, 100));
         table.setGridColor(new Color(230, 234, 240));
@@ -130,14 +132,14 @@ public class HistoryPanel extends JPanel {
 
     private JLabel buildLabel(String text) {
         JLabel lbl = new JLabel(text);
-        lbl.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        lbl.setFont(plain(13));
         lbl.setForeground(new Color(70, 80, 100));
         return lbl;
     }
 
     private JTextField buildTextField(int width, String tip) {
         JTextField f = new JTextField();
-        f.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        f.setFont(plain(13));
         f.setToolTipText(tip);
         f.setPreferredSize(new Dimension(width, 32));
         f.setBorder(BorderFactory.createCompoundBorder(
@@ -148,7 +150,7 @@ public class HistoryPanel extends JPanel {
 
     private JButton buildBtn(String text, Color bg, Color fg) {
         JButton btn = new JButton(text);
-        btn.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        btn.setFont(plain(13));
         btn.setBackground(bg);
         btn.setForeground(fg);
         btn.setFocusPainted(false);

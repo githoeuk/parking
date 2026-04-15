@@ -8,6 +8,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
+import static com.tenco.ui.UIFont.*;
+
 /**
  * 월정기권 관리 화면
  * - 정기권 목록 테이블 (차량번호 / 소유자 / 시작일 / 종료일 / 요금 / 상태)
@@ -50,7 +52,7 @@ public class MonthlyPassPanel extends JPanel {
         p.setOpaque(false);
         p.setBorder(new EmptyBorder(0, 0, 16, 0));
         JLabel title = new JLabel("월정기권 관리");
-        title.setFont(new Font("SansSerif", Font.BOLD, 20));
+        title.setFont(bold(20));
         title.setForeground(new Color(30, 40, 55));
         p.add(title);
         return p;
@@ -73,7 +75,7 @@ public class MonthlyPassPanel extends JPanel {
                 new EmptyBorder(16, 20, 16, 20)));
 
         JLabel sectionLbl = new JLabel("정기권 등록");
-        sectionLbl.setFont(new Font("SansSerif", Font.BOLD, 13));
+        sectionLbl.setFont(bold(13));
         sectionLbl.setForeground(new Color(70, 80, 100));
         card.add(sectionLbl);
         card.add(Box.createVerticalStrut(10));
@@ -100,7 +102,7 @@ public class MonthlyPassPanel extends JPanel {
         row2.add(buildInlineLabel("요금"));   row2.add(regFeeField);
 
         registerBtn = new JButton("등록");
-        registerBtn.setFont(new Font("SansSerif", Font.BOLD, 13));
+        registerBtn.setFont(bold(13));
         registerBtn.setBackground(new Color(37, 99, 235));
         registerBtn.setForeground(Color.WHITE);
         registerBtn.setFocusPainted(false);
@@ -114,7 +116,7 @@ public class MonthlyPassPanel extends JPanel {
         card.add(Box.createVerticalStrut(4));
 
         regResultLabel = new JLabel(" ");
-        regResultLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        regResultLabel.setFont(plain(12));
         card.add(regResultLabel);
 
         return card;
@@ -140,8 +142,8 @@ public class MonthlyPassPanel extends JPanel {
 
         table = new JTable(tableModel);
         table.setRowHeight(30);
-        table.setFont(new Font("SansSerif", Font.PLAIN, 13));
-        table.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 12));
+        table.setFont(plain(13));
+        table.getTableHeader().setFont(bold(12));
         table.getTableHeader().setBackground(new Color(240, 243, 248));
         table.getTableHeader().setForeground(new Color(70, 80, 100));
         table.setGridColor(new Color(230, 234, 240));
@@ -170,7 +172,7 @@ public class MonthlyPassPanel extends JPanel {
 
     private JTextField buildSmallField(int width, String tip) {
         JTextField f = new JTextField();
-        f.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        f.setFont(plain(12));
         f.setToolTipText(tip);
         f.setPreferredSize(new Dimension(width, 30));
         f.setBorder(BorderFactory.createCompoundBorder(
@@ -181,14 +183,14 @@ public class MonthlyPassPanel extends JPanel {
 
     private JLabel buildInlineLabel(String text) {
         JLabel lbl = new JLabel(text);
-        lbl.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        lbl.setFont(plain(12));
         lbl.setForeground(new Color(70, 80, 100));
         return lbl;
     }
 
     private JButton buildBtn(String text, Color bg, Color fg) {
         JButton btn = new JButton(text);
-        btn.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        btn.setFont(plain(12));
         btn.setBackground(bg);
         btn.setForeground(fg);
         btn.setFocusPainted(false);

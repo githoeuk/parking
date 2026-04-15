@@ -60,8 +60,8 @@ public class ParkingRecordDAO {
     public List<ParkingRecord> getCurrentParkingRecords() throws SQLException {
         String sql = """
                 select pz.zone_code, pr.car_number, pr.entry_time
-                from parking_record pr
-                right join parking_zone pz on pr.zone_id = pz.zone_id
+                from parking_zone pz
+                left join parking_record pr on pz.zone_id = pr.zone_id and pr.exit_time is null
                 """;
 
         List<ParkingRecord> records = new ArrayList<>();
@@ -133,7 +133,7 @@ public class ParkingRecordDAO {
                 """;
 
         String updateSql = """
-                UPDATE parking_record SET exit_time = CURRENT_TIME, fee = ? WHERE car_number = ? AND exit_time IS NULL
+                UPDATE parking_record SET exit_time = CURRENT_TIMESTAMP, fee = ? WHERE car_number = ? AND exit_time IS NULL
                 """;
 
 

@@ -30,6 +30,10 @@ public class ParkingService {
             throw new SQLException("입차 등록 실패");
         }
 
+        if(parkingZoneDAO.checkZoneById(zoneId)){
+            throw new SQLException("이미 주차되어 있습니다.");
+        }
+
         parkingRecordDAO.parking(carNumber, zoneId);
     }
 

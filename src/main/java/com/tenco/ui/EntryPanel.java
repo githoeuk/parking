@@ -8,6 +8,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.List;
 
+import static com.tenco.ui.UIFont.*;
+
 /**
  * 입차 화면
  * - 차량 번호 입력
@@ -41,7 +43,7 @@ public class EntryPanel extends JPanel {
         p.setOpaque(false);
         p.setBorder(new EmptyBorder(0, 0, 20, 0));
         JLabel title = new JLabel("입차 등록");
-        title.setFont(new Font("SansSerif", Font.BOLD, 20));
+        title.setFont(bold(20));
         title.setForeground(new Color(30, 40, 55));
         p.add(title);
         return p;
@@ -75,7 +77,7 @@ public class EntryPanel extends JPanel {
         row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         JLabel lbl = new JLabel(labelText);
         lbl.setPreferredSize(new Dimension(80, 36));
-        lbl.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        lbl.setFont(plain(13));
         lbl.setForeground(new Color(70, 80, 100));
         row.add(lbl,   BorderLayout.WEST);
         row.add(field, BorderLayout.CENTER);
@@ -89,11 +91,11 @@ public class EntryPanel extends JPanel {
 
         JLabel lbl = new JLabel("주차 구역");
         lbl.setPreferredSize(new Dimension(80, 36));
-        lbl.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        lbl.setFont(plain(13));
         lbl.setForeground(new Color(70, 80, 100));
 
         zoneCombo = new JComboBox<>();
-        zoneCombo.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        zoneCombo.setFont(plain(13));
 
         refreshZoneBtn = buildSmallButton("새로고침");
 
@@ -119,7 +121,7 @@ public class EntryPanel extends JPanel {
         JPanel row = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         row.setOpaque(false);
         resultLabel = new JLabel(" ");
-        resultLabel.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        resultLabel.setFont(plain(13));
         row.add(resultLabel);
         return row;
     }
@@ -139,7 +141,7 @@ public class EntryPanel extends JPanel {
                 }
             }
         };
-        f.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        f.setFont(plain(13));
         f.setToolTipText(placeholder);
         f.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(200, 205, 215)),
@@ -150,7 +152,7 @@ public class EntryPanel extends JPanel {
 
     private JButton buildPrimaryButton(String text) {
         JButton btn = new JButton(text);
-        btn.setFont(new Font("SansSerif", Font.BOLD, 13));
+        btn.setFont(bold(13));
         btn.setBackground(new Color(37, 99, 235));
         btn.setForeground(Color.WHITE);
         btn.setFocusPainted(false);
@@ -162,7 +164,7 @@ public class EntryPanel extends JPanel {
 
     private JButton buildSmallButton(String text) {
         JButton btn = new JButton(text);
-        btn.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        btn.setFont(plain(12));
         btn.setBackground(new Color(240, 243, 248));
         btn.setForeground(new Color(60, 70, 90));
         btn.setFocusPainted(false);

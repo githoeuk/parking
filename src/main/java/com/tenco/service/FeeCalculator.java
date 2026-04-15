@@ -28,12 +28,12 @@ public class FeeCalculator {
         } else {
             // fee 계산 로직
             // mDiff 몇분 주차했냐
-            if(mDiff > 10 && mDiff <= 30){
-                fee = 1000;
+            if(monthlyPassDAO.getMonthlyPassByCarNumber(carNumber)){
                 return BigDecimal.valueOf(fee);
             }
 
-            if(monthlyPassDAO.getMonthlyPassByCarNumber(carNumber)){
+            if(mDiff > 10 && mDiff <= 30){
+                fee = 1000;
                 return BigDecimal.valueOf(fee);
             }
 
