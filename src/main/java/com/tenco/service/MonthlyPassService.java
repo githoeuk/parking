@@ -3,9 +3,11 @@ package com.tenco.service;
 import com.tenco.dao.MonthlyPassDAO;
 import com.tenco.model.MonthlyPass;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +21,15 @@ public class MonthlyPassService {
         if (mPass == null){
             throw new SQLException("등록이 실패했습니다.");
         }
+
+        LocalDate start = mPass.getStartDate().toLocalDate();
+        LocalDate end = mPass.getEndDate().toLocalDate();
+
+        long daysBetween = ChronoUnit.MONTHS.between(start, end);
+
+        BigDecimal fee = monthlyPassDAO.mPassFee((int)daysBetween);
+        mPass.setFee(fee);
+
         return monthlyPassDAO.insert(mPass);
     } // end of monthInsert
 
@@ -55,5 +66,6 @@ public class MonthlyPassService {
     public boolean isExtends(int date,String carNumber) throws SQLException {
         return monthlyPassDAO.getExtends(date,carNumber);
     }
+
 
 }// end of class
