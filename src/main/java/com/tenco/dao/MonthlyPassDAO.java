@@ -3,6 +3,7 @@ package com.tenco.dao;
 import com.tenco.db.DBConnection;
 import com.tenco.model.MonthlyPass;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -179,5 +180,13 @@ public class MonthlyPassDAO {
             return true;
         }
     }// end of getExtends
+
+    // 정기권 요금
+    public BigDecimal mPassFee(int month){
+
+        BigDecimal basic = BigDecimal.valueOf(100000);
+
+        return basic.multiply(BigDecimal.valueOf(month));
+    }
 
 } // end of class
