@@ -134,12 +134,14 @@ public class Main {
                 }
 
                 LocalDateTime now = LocalDateTime.now();
-                long minutes = ChronoUnit.MINUTES.between(record.getEntryTime(), now);
+                long totalMinutes = ChronoUnit.MINUTES.between(record.getEntryTime(), now);
+                long hour = totalMinutes/60;
+                long minutes = totalMinutes % 60;
                 BigDecimal fee = feeCalculator.calculateFee(carNumber);
-
+                // 아래 조건식 수정 필요
                 panel.setInfoZone(record.getZoneCode() != null ? record.getZoneCode() : String.valueOf(record.getZoneId()));
                 panel.setInfoEntryTime(record.getEntryTime().format(DT_FMT));
-                panel.setInfoDuration(minutes + " 분");
+                panel.setInfoDuration(hour + "시간 " + minutes + "분");
                 panel.setInfoFee(String.format("%,.0f 원", fee.doubleValue()));
 
                 boolean hasPass = monthlyPassService.hasValidPass(carNumber);

@@ -27,10 +27,6 @@ public class ParkingService {
             throw new SQLException("주차 구역은 필수 항목입니다.");
         }
 
-        if(carNumber.trim().contains(" ")) {
-            throw new SQLException("공백 제거 요망");
-        }
-
         int zoneId = parkingZoneDAO.getZoneIdByZoneCode(zoneCode);
         if(zoneId == -1){
             throw new SQLException("입차 등록 실패");
@@ -40,13 +36,13 @@ public class ParkingService {
             throw new SQLException("이미 주차되어 있습니다.");
         }
 
-        parkingRecordDAO.parking(carNumber, zoneId);
+        parkingRecordDAO.parking(carNumber.replaceAll(" ", ""), zoneId);
     }
 
     // 출차
     public void exiting(String carNumber) throws SQLException {
         if(carNumber.trim().isEmpty()){
-            throw new SQLException("주차 구역은 필수 항목입니다.");
+            throw new SQLException("차량 번호는 필수 항목입니다.");
         }
 
         BigDecimal fee = feeCalculator.calculateFee(carNumber);
