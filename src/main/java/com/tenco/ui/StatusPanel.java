@@ -1,15 +1,20 @@
 package com.tenco.ui;
 
+import lombok.Getter;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+
+import static com.tenco.ui.UIFont.*;
 
 /**
  * 주차 현황 화면
  * - 전체 구역 목록 테이블 (구역코드 / 차량번호 / 입차시각)
  * - 빈 자리 수 / 주차 중 차량 수 표시
  */
+@Getter
 public class StatusPanel extends JPanel {
 
     private static final String[] COLUMNS = {"구역 코드", "차량 번호", "입차 시각"};
@@ -35,22 +40,22 @@ public class StatusPanel extends JPanel {
         header.setBorder(new EmptyBorder(0, 0, 16, 0));
 
         JLabel title = new JLabel("주차 현황");
-        title.setFont(new Font("SansSerif", Font.BOLD, 20));
+        title.setFont(bold(20));
         title.setForeground(new Color(30, 40, 55));
 
         JPanel right = new JPanel(new FlowLayout(FlowLayout.RIGHT, 12, 0));
         right.setOpaque(false);
 
         occupiedCountLabel = new JLabel("주차 중: —");
-        occupiedCountLabel.setFont(new Font("SansSerif", Font.BOLD, 13));
+        occupiedCountLabel.setFont(bold(13));
         occupiedCountLabel.setForeground(new Color(220, 38, 38));
 
         emptyCountLabel = new JLabel("빈 자리: —");
-        emptyCountLabel.setFont(new Font("SansSerif", Font.BOLD, 13));
+        emptyCountLabel.setFont(bold(13));
         emptyCountLabel.setForeground(new Color(22, 163, 74));
 
         refreshBtn = new JButton("새로고침");
-        refreshBtn.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        refreshBtn.setFont(plain(12));
         refreshBtn.setBackground(new Color(37, 99, 235));
         refreshBtn.setForeground(Color.WHITE);
         refreshBtn.setFocusPainted(false);
@@ -74,8 +79,8 @@ public class StatusPanel extends JPanel {
 
         table = new JTable(tableModel);
         table.setRowHeight(32);
-        table.setFont(new Font("SansSerif", Font.PLAIN, 13));
-        table.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 12));
+        table.setFont(plain(13));
+        table.getTableHeader().setFont(bold(12));
         table.getTableHeader().setBackground(new Color(240, 243, 248));
         table.getTableHeader().setForeground(new Color(70, 80, 100));
         table.setGridColor(new Color(230, 234, 240));
@@ -109,5 +114,4 @@ public class StatusPanel extends JPanel {
         occupiedCountLabel.setText("주차 중: " + count + " 대");
     }
 
-    public JButton getRefreshBtn() { return refreshBtn; }
 }

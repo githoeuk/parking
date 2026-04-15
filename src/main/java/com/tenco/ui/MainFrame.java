@@ -1,8 +1,13 @@
 package com.tenco.ui;
 
+import lombok.Getter;
+
 import javax.swing.*;
 import java.awt.*;
 
+import static com.tenco.ui.UIFont.*;
+
+@Getter
 public class MainFrame extends JFrame {
 
     private JPanel contentPanel;
@@ -35,7 +40,7 @@ public class MainFrame extends JFrame {
 
         JLabel logo = new JLabel("  P 주차관리시스템  ");
         logo.setForeground(Color.WHITE);
-        logo.setFont(new Font("SansSerif", Font.BOLD, 14));
+        logo.setFont(bold(14));
         nav.add(logo);
 
         JSeparator sep = new JSeparator(JSeparator.VERTICAL);
@@ -59,7 +64,7 @@ public class MainFrame extends JFrame {
         btn.setBorderPainted(false);
         btn.setBackground(new Color(30, 40, 55));
         btn.setForeground(new Color(180, 200, 220));
-        btn.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        btn.setFont(plain(13));
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         btn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -107,7 +112,7 @@ public class MainFrame extends JFrame {
         bar.setBackground(new Color(230, 234, 240));
         bar.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(200, 205, 215)));
         JLabel lbl = new JLabel("준비");
-        lbl.setFont(new Font("SansSerif", Font.PLAIN, 11));
+        lbl.setFont(plain(11));
         lbl.setForeground(new Color(100, 110, 130));
         bar.add(lbl);
         return bar;
@@ -117,10 +122,4 @@ public class MainFrame extends JFrame {
         cardLayout.show(contentPanel, card);
     }
 
-    public EntryPanel       getEntryPanel()       { return entryPanel; }
-    public ExitPanel        getExitPanel()         { return exitPanel; }
-    public StatusPanel      getStatusPanel()       { return statusPanel; }
-    public HistoryPanel     getHistoryPanel()      { return historyPanel; }
-    public MonthlyPassPanel getMonthlyPassPanel()  { return monthlyPassPanel; }
-    public ZoneManagePanel  getZoneManagePanel()   { return zoneManagePanel; }
 }

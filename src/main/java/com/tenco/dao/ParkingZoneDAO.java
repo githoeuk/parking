@@ -23,13 +23,12 @@ public class ParkingZoneDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, zoneId);
             try (ResultSet rs = stmt.executeQuery()) {
-
-                return rs.getBoolean("is_available");
+                if(rs.next())
+                    return rs.getBoolean("is_available");
             }
 
         }
-
-
+        return false;
     }
 
     // 구역 추가

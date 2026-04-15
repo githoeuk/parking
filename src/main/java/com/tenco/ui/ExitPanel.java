@@ -1,8 +1,12 @@
 package com.tenco.ui;
 
+import lombok.Getter;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+
+import static com.tenco.ui.UIFont.*;
 
 /**
  * 출차 화면
@@ -10,9 +14,11 @@ import java.awt.*;
  * - 입차 정보 + 예상 요금 표시
  * - 출차 처리 버튼
  */
+@Getter
 public class ExitPanel extends JPanel {
 
     private JTextField carNumberField;
+
     private JButton searchBtn;
 
     private JLabel infoZoneLabel;
@@ -38,7 +44,7 @@ public class ExitPanel extends JPanel {
         p.setOpaque(false);
         p.setBorder(new EmptyBorder(0, 0, 20, 0));
         JLabel title = new JLabel("출차 처리");
-        title.setFont(new Font("SansSerif", Font.BOLD, 20));
+        title.setFont(bold(20));
         title.setForeground(new Color(30, 40, 55));
         p.add(title);
         return p;
@@ -65,7 +71,7 @@ public class ExitPanel extends JPanel {
 
         // 입차 정보 섹션
         JLabel sectionLbl = new JLabel("입차 정보");
-        sectionLbl.setFont(new Font("SansSerif", Font.BOLD, 12));
+        sectionLbl.setFont(bold(12));
         sectionLbl.setForeground(new Color(100, 110, 130));
         card.add(sectionLbl);
         card.add(Box.createVerticalStrut(12));
@@ -100,7 +106,7 @@ public class ExitPanel extends JPanel {
         JPanel resultRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         resultRow.setOpaque(false);
         resultLabel = new JLabel(" ");
-        resultLabel.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        resultLabel.setFont(plain(13));
         resultRow.add(resultLabel);
         card.add(resultRow);
 
@@ -117,7 +123,7 @@ public class ExitPanel extends JPanel {
 
         JLabel lbl = new JLabel("차량 번호");
         lbl.setPreferredSize(new Dimension(80, 36));
-        lbl.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        lbl.setFont(plain(13));
         lbl.setForeground(new Color(70, 80, 100));
 
         carNumberField = new JTextField() {
@@ -133,13 +139,13 @@ public class ExitPanel extends JPanel {
                 }
             }
         };
-        carNumberField.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        carNumberField.setFont(plain(13));
         carNumberField.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(200, 205, 215)),
                 new EmptyBorder(4, 8, 4, 8)));
 
         searchBtn = new JButton("조회");
-        searchBtn.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        searchBtn.setFont(plain(13));
         searchBtn.setBackground(new Color(37, 99, 235));
         searchBtn.setForeground(Color.WHITE);
         searchBtn.setFocusPainted(false);
@@ -160,7 +166,7 @@ public class ExitPanel extends JPanel {
 
         JLabel keyLbl = new JLabel(key);
         keyLbl.setPreferredSize(new Dimension(80, 24));
-        keyLbl.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        keyLbl.setFont(plain(13));
         keyLbl.setForeground(new Color(100, 110, 130));
 
         row.add(keyLbl,     BorderLayout.WEST);
@@ -170,14 +176,14 @@ public class ExitPanel extends JPanel {
 
     private JLabel buildInfoLabel(String text) {
         JLabel lbl = new JLabel(text);
-        lbl.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        lbl.setFont(plain(13));
         lbl.setForeground(new Color(30, 40, 55));
         return lbl;
     }
 
     private JButton buildPrimaryButton(String text, Color bg) {
         JButton btn = new JButton(text);
-        btn.setFont(new Font("SansSerif", Font.BOLD, 13));
+        btn.setFont(bold(13));
         btn.setBackground(bg);
         btn.setForeground(Color.WHITE);
         btn.setFocusPainted(false);
@@ -218,6 +224,4 @@ public class ExitPanel extends JPanel {
         resultLabel.setForeground(success ? new Color(22, 163, 74) : new Color(220, 38, 38));
     }
 
-    public JButton getSearchBtn() { return searchBtn; }
-    public JButton getExitBtn()   { return exitBtn; }
 }

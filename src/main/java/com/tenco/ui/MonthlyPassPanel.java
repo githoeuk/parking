@@ -1,10 +1,14 @@
 package com.tenco.ui;
 
+import lombok.Getter;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+
+import static com.tenco.ui.UIFont.*;
 
 /**
  * 월정기권 관리 화면
@@ -13,6 +17,7 @@ import java.awt.*;
  * - 등록 버튼: DB INSERT (is_available = true)
  * - 삭제 버튼: soft delete (is_available = false), 목록에서 is_available=true인 행만 표시
  */
+@Getter
 public class MonthlyPassPanel extends JPanel {
 
     private static final String[] COLUMNS = {"ID", "차량 번호", "소유자", "연락처", "시작일", "종료일", "요금(원)", "상태"};
@@ -47,7 +52,7 @@ public class MonthlyPassPanel extends JPanel {
         p.setOpaque(false);
         p.setBorder(new EmptyBorder(0, 0, 16, 0));
         JLabel title = new JLabel("월정기권 관리");
-        title.setFont(new Font("SansSerif", Font.BOLD, 20));
+        title.setFont(bold(20));
         title.setForeground(new Color(30, 40, 55));
         p.add(title);
         return p;
@@ -70,43 +75,48 @@ public class MonthlyPassPanel extends JPanel {
                 new EmptyBorder(16, 20, 16, 20)));
 
         JLabel sectionLbl = new JLabel("정기권 등록");
-        sectionLbl.setFont(new Font("SansSerif", Font.BOLD, 13));
+        sectionLbl.setFont(bold(13));
         sectionLbl.setForeground(new Color(70, 80, 100));
         card.add(sectionLbl);
-        card.add(Box.createVerticalStrut(12));
+        card.add(Box.createVerticalStrut(10));
 
-        JPanel fields = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 4));
-        fields.setOpaque(false);
+        regCarField   = buildSmallField(160, "차량 번호 예) 12가 3456");
+        regOwnerField = buildSmallField(120, "소유자 이름");
+        regPhoneField = buildSmallField(140, "예) 010-1234-5678");
+        regStartField = buildSmallField(120, "yyyy-MM-dd");
+        regEndField   = buildSmallField(120, "yyyy-MM-dd");
+        regFeeField   = buildSmallField(100, "요금 (원)");
 
-        regCarField   = buildSmallField(140, "차량 번호 예) 12가 3456");
-        regOwnerField = buildSmallField(90,  "소유자 이름");
-        regPhoneField = buildSmallField(120, "연락처 예) 010-1234-5678");
-        regStartField = buildSmallField(110, "시작일 yyyy-MM-dd");
-        regEndField   = buildSmallField(110, "종료일 yyyy-MM-dd");
-        regFeeField   = buildSmallField(80,  "요금 (원)");
+        // 1행: 차량번호 / 소유자 / 연락처
+        JPanel row1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 2));
+        row1.setOpaque(false);
+        row1.add(buildInlineLabel("차량번호")); row1.add(regCarField);
+        row1.add(buildInlineLabel("소유자"));   row1.add(regOwnerField);
+        row1.add(buildInlineLabel("연락처"));   row1.add(regPhoneField);
 
-        fields.add(buildInlineLabel("차량번호")); fields.add(regCarField);
-        fields.add(buildInlineLabel("소유자"));   fields.add(regOwnerField);
-        fields.add(buildInlineLabel("연락처"));   fields.add(regPhoneField);
-        fields.add(buildInlineLabel("시작일"));   fields.add(regStartField);
-        fields.add(buildInlineLabel("종료일"));   fields.add(regEndField);
-        fields.add(buildInlineLabel("요금"));     fields.add(regFeeField);
+        // 2행: 시작일 / 종료일 / 요금 / 등록버튼
+        JPanel row2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 2));
+        row2.setOpaque(false);
+        row2.add(buildInlineLabel("시작일")); row2.add(regStartField);
+        row2.add(buildInlineLabel("종료일")); row2.add(regEndField);
+        row2.add(buildInlineLabel("요금"));   row2.add(regFeeField);
 
         registerBtn = new JButton("등록");
-        registerBtn.setFont(new Font("SansSerif", Font.BOLD, 13));
+        registerBtn.setFont(bold(13));
         registerBtn.setBackground(new Color(37, 99, 235));
         registerBtn.setForeground(Color.WHITE);
         registerBtn.setFocusPainted(false);
         registerBtn.setBorderPainted(false);
-        registerBtn.setPreferredSize(new Dimension(68, 32));
+        registerBtn.setPreferredSize(new Dimension(72, 32));
         registerBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        fields.add(registerBtn);
+        row2.add(registerBtn);
 
-        card.add(fields);
-        card.add(Box.createVerticalStrut(6));
+        card.add(row1);
+        card.add(row2);
+        card.add(Box.createVerticalStrut(4));
 
         regResultLabel = new JLabel(" ");
-        regResultLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        regResultLabel.setFont(plain(12));
         card.add(regResultLabel);
 
         return card;
@@ -132,16 +142,21 @@ public class MonthlyPassPanel extends JPanel {
 
         table = new JTable(tableModel);
         table.setRowHeight(30);
-        table.setFont(new Font("SansSerif", Font.PLAIN, 13));
-        table.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 12));
+        table.setFont(plain(13));
+        table.getTableHeader().setFont(bold(12));
         table.getTableHeader().setBackground(new Color(240, 243, 248));
         table.getTableHeader().setForeground(new Color(70, 80, 100));
         table.setGridColor(new Color(230, 234, 240));
         table.setSelectionBackground(new Color(219, 234, 254));
         table.setShowVerticalLines(false);
+        // 컬럼 너비: ID / 차량번호 / 소유자 / 연락처 / 시작일 / 종료일 / 요금 / 상태
+        int[] colWidths = {45, 130, 100, 140, 110, 110, 100, 90};
+        for (int i = 0; i < colWidths.length; i++) {
+            table.getColumnModel().getColumn(i).setPreferredWidth(colWidths[i]);
+        }
         table.getColumnModel().getColumn(0).setMaxWidth(50);
 
-        // 상태 열 렌더러 (컬럼 7번: ID/차량번호/소유자/연락처/시작일/종료일/요금/상태)
+        // 상태 열 렌더러
         table.getColumnModel().getColumn(7).setCellRenderer(new PassStatusRenderer());
 
         JScrollPane scroll = new JScrollPane(table);
@@ -157,7 +172,7 @@ public class MonthlyPassPanel extends JPanel {
 
     private JTextField buildSmallField(int width, String tip) {
         JTextField f = new JTextField();
-        f.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        f.setFont(plain(12));
         f.setToolTipText(tip);
         f.setPreferredSize(new Dimension(width, 30));
         f.setBorder(BorderFactory.createCompoundBorder(
@@ -168,14 +183,14 @@ public class MonthlyPassPanel extends JPanel {
 
     private JLabel buildInlineLabel(String text) {
         JLabel lbl = new JLabel(text);
-        lbl.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        lbl.setFont(plain(12));
         lbl.setForeground(new Color(70, 80, 100));
         return lbl;
     }
 
     private JButton buildBtn(String text, Color bg, Color fg) {
         JButton btn = new JButton(text);
-        btn.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        btn.setFont(plain(12));
         btn.setBackground(bg);
         btn.setForeground(fg);
         btn.setFocusPainted(false);
@@ -235,9 +250,6 @@ public class MonthlyPassPanel extends JPanel {
         regResultLabel.setForeground(success ? new Color(22, 163, 74) : new Color(220, 38, 38));
     }
 
-    public JButton getRegisterBtn() { return registerBtn; }
-    public JButton getDeleteBtn()   { return deleteBtn; }
-    public JButton getRefreshBtn()  { return refreshBtn; }
 
     // ── 상태 컬럼 렌더러 ──────────────────────────────────
 

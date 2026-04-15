@@ -1,16 +1,22 @@
 package com.tenco.ui;
 
+import lombok.Getter;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
+import static com.tenco.ui.UIFont.*;
+
 /**
  * 구역 관리 화면 (관리자)
  * - 구역 목록 테이블 (ID / 구역코드 / 사용여부)
  * - 구역 추가 / 삭제 / 상태 변경 (is_available 토글)
  */
+
+@Getter
 public class ZoneManagePanel extends JPanel {
 
     private static final String[] COLUMNS = {"ID", "구역 코드", "사용 여부"};
@@ -41,7 +47,7 @@ public class ZoneManagePanel extends JPanel {
         p.setOpaque(false);
         p.setBorder(new EmptyBorder(0, 0, 16, 0));
         JLabel title = new JLabel("구역 관리");
-        title.setFont(new Font("SansSerif", Font.BOLD, 20));
+        title.setFont(bold(20));
         title.setForeground(new Color(30, 40, 55));
         p.add(title);
         return p;
@@ -64,7 +70,7 @@ public class ZoneManagePanel extends JPanel {
                 new EmptyBorder(14, 20, 14, 20)));
 
         JLabel sectionLbl = new JLabel("구역 추가");
-        sectionLbl.setFont(new Font("SansSerif", Font.BOLD, 13));
+        sectionLbl.setFont(bold(13));
         sectionLbl.setForeground(new Color(70, 80, 100));
         card.add(sectionLbl);
         card.add(Box.createVerticalStrut(10));
@@ -73,11 +79,11 @@ public class ZoneManagePanel extends JPanel {
         row.setOpaque(false);
 
         JLabel lbl = new JLabel("구역 코드");
-        lbl.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        lbl.setFont(plain(13));
         lbl.setForeground(new Color(70, 80, 100));
 
         addCodeField = new JTextField();
-        addCodeField.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        addCodeField.setFont(plain(13));
         addCodeField.setToolTipText("예) A-01");
         addCodeField.setPreferredSize(new Dimension(160, 32));
         addCodeField.setBorder(BorderFactory.createCompoundBorder(
@@ -85,7 +91,7 @@ public class ZoneManagePanel extends JPanel {
                 new EmptyBorder(2, 8, 2, 8)));
 
         addBtn = new JButton("추가");
-        addBtn.setFont(new Font("SansSerif", Font.BOLD, 13));
+        addBtn.setFont(bold(13));
         addBtn.setBackground(new Color(37, 99, 235));
         addBtn.setForeground(Color.WHITE);
         addBtn.setFocusPainted(false);
@@ -100,7 +106,7 @@ public class ZoneManagePanel extends JPanel {
         card.add(Box.createVerticalStrut(4));
 
         addResultLabel = new JLabel(" ");
-        addResultLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        addResultLabel.setFont(plain(12));
         card.add(addResultLabel);
 
         return card;
@@ -118,7 +124,7 @@ public class ZoneManagePanel extends JPanel {
         refreshBtn = buildBtn("새로고침",   new Color(240, 243, 248), new Color(60, 70, 90));
 
         JLabel hint = new JLabel("  * 상태 변경: 사용 가능 ↔ 점검 중");
-        hint.setFont(new Font("SansSerif", Font.PLAIN, 11));
+        hint.setFont(plain(11));
         hint.setForeground(new Color(130, 140, 160));
 
         toolbar.add(deleteBtn);
@@ -132,7 +138,7 @@ public class ZoneManagePanel extends JPanel {
 
         table = new JTable(tableModel);
         table.setRowHeight(30);
-        table.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        table.setFont(plain(13));
         table.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 12));
         table.getTableHeader().setBackground(new Color(240, 243, 248));
         table.getTableHeader().setForeground(new Color(70, 80, 100));
@@ -155,7 +161,7 @@ public class ZoneManagePanel extends JPanel {
 
     private JButton buildBtn(String text, Color bg, Color fg) {
         JButton btn = new JButton(text);
-        btn.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        btn.setFont(plain(12));
         btn.setBackground(bg);
         btn.setForeground(fg);
         btn.setFocusPainted(false);
@@ -195,11 +201,6 @@ public class ZoneManagePanel extends JPanel {
         addResultLabel.setText(msg);
         addResultLabel.setForeground(success ? new Color(22, 163, 74) : new Color(220, 38, 38));
     }
-
-    public JButton getAddBtn()     { return addBtn; }
-    public JButton getDeleteBtn()  { return deleteBtn; }
-    public JButton getToggleBtn()  { return toggleBtn; }
-    public JButton getRefreshBtn() { return refreshBtn; }
 
     // ── 사용 여부 컬럼 렌더러 ─────────────────────────────
 

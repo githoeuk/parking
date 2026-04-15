@@ -10,6 +10,7 @@ import com.tenco.service.ParkingService;
 import com.tenco.ui.*;
 
 import javax.swing.*;
+import java.awt.Font;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -31,9 +32,24 @@ public class Main {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
+            // Nimbus L&F: 버튼 배경색/텍스트색 등 커스텀 스타일이 macOS/Windows/Linux 모두 정상 렌더링됨
             try {
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                    if ("Nimbus".equals(info.getName())) {
+                        UIManager.setLookAndFeel(info.getClassName());
+                        break;
+                    }
+                }
             } catch (Exception ignored) {}
+
+            // 한글 글자 깨짐 방지: 한글을 지원하는 폰트를 우선 사용
+            Font uiFont = com.tenco.ui.UIFont.plain(13);
+            java.util.Arrays.asList(
+                "Label.font", "Button.font", "TextField.font", "TextArea.font",
+                "ComboBox.font", "List.font", "Table.font", "TableHeader.font",
+                "TitledBorder.font", "ToolTip.font", "MenuItem.font", "Menu.font",
+                "CheckBox.font", "RadioButton.font", "Spinner.font", "FormattedTextField.font"
+            ).forEach(key -> UIManager.put(key, uiFont));
 
             MainFrame frame = new MainFrame();
             bindEntry(frame);
