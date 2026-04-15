@@ -3,10 +3,8 @@ package com.tenco.dao;
 import com.tenco.db.DBConnection;
 import com.tenco.model.MonthlyPass;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -116,19 +114,18 @@ public class MonthlyPassDAO {
     } // end if check
 
 
-
     // 정기권 만료 알림
-    public List<MonthlyPass> isNearExpiry ()throws SQLException{
-       List<MonthlyPass> mPass = new ArrayList<>();
+    public List<MonthlyPass> isNearExpiry() throws SQLException {
+        List<MonthlyPass> mPass = new ArrayList<>();
         String sql = """
                 SELECT * FROM monthly_pass WHERE end_date - CURRENT_DATE() <= 15
                 """;
 
-        try(Connection conn = DBConnection.getConnection();
-            PreparedStatement tstmt = conn.prepareStatement(sql);
-        ){
-            try(ResultSet rs = tstmt.executeQuery()){
-                while (rs.next()){
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement tstmt = conn.prepareStatement(sql);
+        ) {
+            try (ResultSet rs = tstmt.executeQuery()) {
+                while (rs.next()) {
                     MonthlyPass mList = MonthlyPass.builder()
                             .passId(rs.getInt("pass_id"))
                             .carNumber(rs.getString("car_number"))
@@ -151,16 +148,36 @@ public class MonthlyPassDAO {
                 SELECT is_available FROM monthly_pass WHERE car_number = ?
                 """;
 
-        try(Connection conn = DBConnection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)){
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, carNumber);
-            try(ResultSet rs = stmt.executeQuery()){
-                if(rs.next()){
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
                     return rs.getBoolean("is_available");
                 }
             }
             return false;
         }
     }
+
+    // 정기권 연장
+    public boolean getExtends(int date, String carNumber) throws SQLException {
+        String sql = """
+             
+             UPDATE monthly_pass
+             SET end_date = date_add(end_date,interval ? day)
+             WHERE car_number = ?;
+                """;
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql)
+        ){
+            pstmt.setInt(1,date);
+            pstmt.setString(2,carNumber);
+
+            pstmt.executeUpdate();
+            return true;
+        }
+    }// end of getExtends
 
 } // end of class
