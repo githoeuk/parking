@@ -15,7 +15,7 @@ public class FeeCalculator {
     // 요금부과
     public BigDecimal calculateFee(String carNumber) throws SQLException {
         // select문으로 start_time 가져와야
-        ParkingRecord record = parkingRecordDAO.selectByCarNum(carNumber);
+        ParkingRecord record = parkingRecordDAO.selectByCarNum(carNumber.replaceAll(" ", ""));
         LocalDateTime start_time = record.getEntryTime();
         LocalDateTime current_time = LocalDateTime.now();
         double mDiff = ChronoUnit.MINUTES.between(start_time, current_time);
