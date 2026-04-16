@@ -5,6 +5,7 @@ import com.tenco.model.Admin;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class AdminService {
@@ -64,5 +65,7 @@ public class AdminService {
         return adminsDAO.getAdminList();
 
     } // end of getAdminLists
+
+
 
 } // end of class
