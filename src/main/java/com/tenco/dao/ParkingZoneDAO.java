@@ -170,4 +170,22 @@ public class ParkingZoneDAO {
         }
         return -1;
     }
+
+    public String getZoneCodeByZoneId(int zoneId) throws SQLException {
+        String sql = """
+                SELECT zone_code FROM parking_zone WHERE zone_id = ?
+                """;
+
+        try(Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setInt(1, zoneId);
+
+            try(ResultSet rs = stmt.executeQuery()){
+                if(rs.next()){
+                    return rs.getString("zone_code");
+                }
+            }
+        }
+        return null;
+    }
 }
