@@ -14,8 +14,11 @@ public class AdminsDAO {
 
     // 1. 로그인
     // 2. 관리자 추가
-    // 3. 관리자 조회
+    // 3. 관리자 삭제
+    // 4. 관리자 조회
 
+
+    // 1. 로그인--------------------------------------------
     public Admin login(String userId,String password) throws SQLException {
         String sql = """
                 SELECT * FROM admins WHERE user_id = ? and password =?
@@ -43,7 +46,7 @@ public class AdminsDAO {
         } // end if pstmt
     } // end of login
 
-    // 관리자 추가
+    // 2. 관리자 추가 --------------------------
     public boolean addAdmin(Admin admin) throws SQLException {
         String sql = """
                 INSERT INTO admins ( user_id , password, name) VALUES (? , ? ,?)
@@ -62,7 +65,7 @@ public class AdminsDAO {
         } // end of pstmt
     } // end of updateAdmin
 
-    //관리자 삭제
+    // 3. 관리자 삭제 -------------------------------
     public boolean deleteAdmin(String userId ) throws SQLException {
         String sql = """
                 
@@ -82,7 +85,7 @@ public class AdminsDAO {
     }
 
 
-    // 관리자 조회
+    // 4. 관리자 조회 -----------------------------
     public List<Admin> getAdminList() throws SQLException {
        List<Admin> adminList = new ArrayList<>();
         String sql = """
@@ -104,22 +107,6 @@ public class AdminsDAO {
             }
         }
         return adminList;
-    }
-
-    public static void main(String[] args) {
-        AdminsDAO adminsDAO = new AdminsDAO();
-        try {
-
-            Admin admin = Admin.builder()
-                    .userId("abcd")
-                    .password("1234")
-                    .name("홍길동")
-                    .build();
-
-            System.out.println(adminsDAO.deleteAdmin("abcd"));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 
 } // end of class
