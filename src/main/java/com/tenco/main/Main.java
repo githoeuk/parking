@@ -1,9 +1,11 @@
 package com.tenco.main;
 
 import com.tenco.dao.ParkingZoneDAO;
+import com.tenco.model.Admin;
 import com.tenco.model.MonthlyPass;
 import com.tenco.model.ParkingRecord;
 import com.tenco.model.ParkingZone;
+import com.tenco.service.AdminService;
 import com.tenco.service.FeeCalculator;
 import com.tenco.service.MonthlyPassService;
 import com.tenco.service.ParkingService;
@@ -26,6 +28,7 @@ public class Main {
     private static final MonthlyPassService monthlyPassService = new MonthlyPassService();
     private static final FeeCalculator feeCalculator         = new FeeCalculator();
     private static final ParkingZoneDAO parkingZoneDAO       = new ParkingZoneDAO();
+    private static final AdminService adminService           = new AdminService();
 
     private static final DateTimeFormatter DT_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final DateTimeFormatter D_FMT  = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -51,13 +54,27 @@ public class Main {
                 "CheckBox.font", "RadioButton.font", "Spinner.font", "FormattedTextField.font"
             ).forEach(key -> UIManager.put(key, uiFont));
 
-            MainFrame frame = new MainFrame();
+            // 로그인 다이얼로그 먼저 표시
+            LoginDialog loginDialog = new LoginDialog(adminService);
+            loginDialog.setVisible(true);
+
+            if (!loginDialog.isLoginSuccess()) {
+                System.exit(0);
+                return;
+            }
+
+            String adminName = adminService.isLogin()
+                    ? adminService.getCurrentAdminName()
+                    : "관리자";
+
+            MainFrame frame = new MainFrame(adminName);
             bindEntry(frame);
             bindExit(frame);
             bindStatus(frame);
             bindHistory(frame);
             bindMonthlyPass(frame);
             bindZoneManage(frame);
+            bindAdmin(frame);
 
             // 시작 시 현황 자동 로드
             loadStatus(frame.getStatusPanel());
@@ -413,6 +430,70 @@ public class Main {
             panel.setRows(rows);
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(panel, "구역 조회 실패: " + ex.getMessage(), "오류", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    // ── 관리자 설정 ────────────────────────────────────────────
+
+    private static void bindAdmin(MainFrame frame) {
+        AdminPanel panel = frame.getAdminPanel();
+
+        // 추가
+        panel.getAddBtn().addActionListener(e -> {
+            String userId   = panel.getAddUserId();
+            String password = panel.getAddPassword();
+            String name     = panel.getAddName();
+
+            if (userId.isEmpty() || password.isEmpty() || name.isEmpty()) {
+                panel.setAddResult("아이디, 비밀번호, 이름은 필수입니다.", false);
+                return;
+            }
+            try {
+                Admin admin = Admin.builder()
+                        .userId(userId)
+                        .password(password)
+                        .name(name)
+                        .build();
+                adminService.addAdmin(admin);
+                panel.setAddResult("관리자 추가 완료: " + userId, true);
+                panel.clearAddForm();
+                loadAdmins(panel);
+            } catch (SQLException ex) {
+                panel.setAddResult("추가 실패: " + ex.getMessage(), false);
+            }
+        });
+
+        // 비활성화(삭제)
+        panel.getDeleteBtn().addActionListener(e -> {
+            String userId = panel.getSelectedUserId();
+            if (userId == null) {
+                JOptionPane.showMessageDialog(panel, "비활성화할 관리자를 선택해주세요.", "알림", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            int confirm = JOptionPane.showConfirmDialog(
+                panel, userId + " 관리자를 비활성화하시겠습니까?", "확인", JOptionPane.YES_NO_OPTION
+            );
+            if (confirm != JOptionPane.YES_OPTION) return;
+            try {
+                adminService.deleteAdmin(userId);
+                loadAdmins(panel);
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(panel, "비활성화 실패: " + ex.getMessage(), "오류", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        // 새로고침
+        panel.getRefreshBtn().addActionListener(e -> loadAdmins(panel));
+
+        loadAdmins(panel);
+    }
+
+    private static void loadAdmins(AdminPanel panel) {
+        try {
+            List<Admin> admins = adminService.getAdminList();
+            panel.setRows(admins);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(panel, "관리자 조회 실패: " + ex.getMessage(), "오류", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

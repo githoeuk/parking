@@ -19,6 +19,11 @@ public class AdminService {
         return currentAdmin != null;
     } // end of isLogin
 
+    // 현재 로그인한 관리자 이름 반환
+    public String getCurrentAdminName() {
+        return currentAdmin != null ? currentAdmin.getName() : "";
+    }
+
     // 로그인
     public String login(String userId, String password) throws SQLException {
         Admin admin = adminsDAO.login(userId,password);

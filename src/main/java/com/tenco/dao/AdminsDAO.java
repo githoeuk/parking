@@ -2,7 +2,6 @@ package com.tenco.dao;
 
 import com.tenco.db.DBConnection;
 import com.tenco.model.Admin;
-import org.mindrot.jbcrypt.BCrypt;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -11,9 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Scanner;
 
 public class AdminsDAO {
 
@@ -22,26 +19,27 @@ public class AdminsDAO {
     // 3. 관리자 삭제
     // 4. 관리자 조회
 
-
     // 1. 로그인--------------------------------------------
     public Admin login(String userId, String password) throws SQLException {
         String sql = """
-                SELECT * FROM admins WHERE user_id = ? and password =?
+                SELECT * FROM admins WHERE user_id = ?
                 """;
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)
         ) {
             pstmt.setString(1, userId);
-            pstmt.setString(2, encrypt(password));
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 // 1. 다중 행인지 단일 행인지 쿼리 출력값 확인
                 // 단일행 -> 1 row가 나오거나 아예 안나오거나
                 if (rs.next()) {
+                    String encryptedPassword = rs.getString("password");
+                    if (!encrypt(password).equals(encryptedPassword)) {
+                        return null;
+                    }
                     Admin admin = new Admin();
                     admin.setUserId(rs.getString("user_id"));
-                    admin.setPassword(rs.getString("password"));
                     admin.setName(rs.getString("name"));
                     return admin;
                 } else {
@@ -115,26 +113,20 @@ public class AdminsDAO {
         return adminList;
     }
 
-    // 비밀번호 해싱처리
-    public static String encrypt(String text)  {
-
-        MessageDigest md = null;
+    // 비밀번호 SHA-256 해싱
+    public static String encrypt(String text) {
         try {
-            md = MessageDigest.getInstance("SHA-256");
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            md.update(text.getBytes());
+            byte[] byteData = md.digest();
+            StringBuilder sb = new StringBuilder();
+            for (byte b : byteData) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
-
-        // 비밀번호 글자를 바이트(byte) 조각으로 쪼개서 도구에 넣고 돌리기
-        md.update(text.getBytes());
-        byte[] byteData = md.digest();
-
-        // 쪼개진 바이트 조각들을 사람이 읽을 수 있는 16진수 글자(Hex)로 조립하기
-        StringBuilder sb = new StringBuilder();
-        for (byte b : byteData) {
-            sb.append(String.format("%02x", b));
-        }
-        return sb.toString();
     }
 
 

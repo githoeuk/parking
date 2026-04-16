@@ -19,9 +19,13 @@ public class MainFrame extends JFrame {
     private HistoryPanel historyPanel;
     private MonthlyPassPanel monthlyPassPanel;
     private ZoneManagePanel zoneManagePanel;
+    private AdminPanel adminPanel;
 
-    public MainFrame() {
-        setTitle("주차관리시스템");
+    private final String adminName;
+
+    public MainFrame(String adminName) {
+        this.adminName = adminName;
+        setTitle("주차관리시스템 - " + adminName + " 님");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 700);
         setMinimumSize(new Dimension(800, 600));
@@ -48,12 +52,19 @@ public class MainFrame extends JFrame {
         sep.setForeground(new Color(60, 80, 100));
         nav.add(sep);
 
-        String[] menus = {"입차", "출차", "주차현황", "이력조회", "정기권", "구역관리"};
-        String[] cards  = {"ENTRY", "EXIT", "STATUS", "HISTORY", "PASS", "ZONE"};
+        String[] menus = {"입차", "출차", "주차현황", "이력조회", "정기권", "구역관리", "관리자 설정"};
+        String[] cards  = {"ENTRY", "EXIT", "STATUS", "HISTORY", "PASS", "ZONE", "ADMIN"};
 
         for (int i = 0; i < menus.length; i++) {
             nav.add(buildNavButton(menus[i], cards[i]));
         }
+
+        // 오른쪽: 로그인 사용자 표시
+        JLabel userLabel = new JLabel("  " + adminName + " 님  ");
+        userLabel.setForeground(new Color(160, 185, 210));
+        userLabel.setFont(plain(12));
+        nav.add(userLabel);
+
         return nav;
     }
 
@@ -95,6 +106,7 @@ public class MainFrame extends JFrame {
         historyPanel     = new HistoryPanel();
         monthlyPassPanel = new MonthlyPassPanel();
         zoneManagePanel  = new ZoneManagePanel();
+        adminPanel       = new AdminPanel();
 
         contentPanel.add(entryPanel,       "ENTRY");
         contentPanel.add(exitPanel,        "EXIT");
@@ -102,6 +114,7 @@ public class MainFrame extends JFrame {
         contentPanel.add(historyPanel,     "HISTORY");
         contentPanel.add(monthlyPassPanel, "PASS");
         contentPanel.add(zoneManagePanel,  "ZONE");
+        contentPanel.add(adminPanel,       "ADMIN");
 
         cardLayout.show(contentPanel, "STATUS");
         return contentPanel;
