@@ -19,6 +19,7 @@ public class ParkingService {
 
     // 입차 등록
     public void parking(String carNumber, String zoneCode) throws SQLException {
+
         if(carNumber.trim().isEmpty()){
             throw new SQLException("차번호는 필수 항목입니다.");
         }
@@ -34,6 +35,10 @@ public class ParkingService {
 
         if(!parkingZoneDAO.checkZoneById(zoneId)){
             throw new SQLException("이미 주차되어 있습니다.");
+        }
+
+        if (parkingRecordDAO.selectByCarNum(carNumber) != null){
+            throw new SQLException("이미 주차된 차량입니다.");
         }
 
         parkingRecordDAO.parking(carNumber.replaceAll(" ", ""), zoneId);
